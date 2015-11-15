@@ -39,6 +39,6 @@ create-drupal7-project --help
 
 ### backend user
 
-admin // jUasz67GastfZUasiHhz87
+admin // JuZas67GzZtas67GZas
 
 [1]: https://github.com/vagrant-php/doc
