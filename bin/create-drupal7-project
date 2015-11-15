@@ -194,6 +194,9 @@ if [ -f "../drupal.sql" ]; then
     vagrant ssh -c "cd /vagrant && mysql $name < drupal.sql"
 fi
 
+# enable field:ui (cause without that, user cant add fields on node
+vagrant ssh -c "cd /vagrant && drush pm-enable -y field_ui"
+
 # internationalization
 vagrant ssh -c "cd /vagrant && drush dl drush_language"
 vagrant ssh -c "cd /vagrant && drush pm-download -y l10n_update i18n"
