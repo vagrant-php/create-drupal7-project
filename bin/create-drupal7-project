@@ -15,7 +15,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # defaults
 application=drupal7
 language=de
-modules="ckeditor date entityreference file image i18n_menu i18n_path i18n_redirect i18n_string i18n_sync i18n_taxonomy inline_entity_form insert link list multiupload_filefield_widget multiupload_imagefield_widget menu menu_block number options path pathauto smtp taxonomy views webform webform_reply_to webform_validation"
+modules="ckeditor date entityreference file image i18n_menu i18n_path i18n_redirect i18n_string i18n_taxonomy inline_entity_form insert link list multiupload_filefield_widget multiupload_imagefield_widget menu menu_block number options path pathauto smtp taxonomy views webform webform_reply_to webform_validation"
 theme=bootstrap
 vagrantPhpBranch=14.04
 vagrantPhpRepository=https://github.com/vagrant-php/ubuntu.git
