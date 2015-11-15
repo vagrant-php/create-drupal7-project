@@ -15,6 +15,8 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # defaults
 application=drupal7
 language=de
+modules="ckeditor date entityreference file image i18n_menu i18n_path i18n_redirect i18n_string i18n_sync i18n_taxonomy inline_entity_form insert link list multiupload_filefield_widget multiupload_imagefield_widget menu menu_block number options path pathauto smtp taxonomy views webform webform_reply_to webform_validation"
+theme=bootstrap
 vagrantPhpBranch=14.04
 vagrantPhpRepository=https://github.com/vagrant-php/ubuntu.git
 vagrantProvider=virtualbox
@@ -29,8 +31,16 @@ do
             language="${i#*=}"
             shift
         ;;
+        --modules=*)
+            modules="${i#*=}"
+            shift
+        ;;
         --name=*)
             name="${i#*=}"
+            shift
+        ;;
+        --theme=*)
+            theme="${i#*=}"
             shift
         ;;
         --vagrantPhpBranch=*)
@@ -186,19 +196,18 @@ fi
 
 # internationalization
 vagrant ssh -c "cd /vagrant && drush dl drush_language"
-vagrant ssh -c "cd /vagrant && drush pm-enable -y l10n_update i18n locale"
+vagrant ssh -c "cd /vagrant && drush pm-enable -y l10n_update i18n i18n_block i18n_field i18n_node i18n_variable locale"
 vagrant ssh -c "cd /vagrant && drush language-add $language"
 vagrant ssh -c "cd /vagrant && drush language-default $language"
 vagrant ssh -c "cd /vagrant && drush l10n-update-refresh"
 vagrant ssh -c "cd /vagrant && drush l10n-update --languages=$language"
 
-# theme
-vagrant ssh -c "cd /vagrant && drush pm-enable -y bootstrap"
-vagrant ssh -c "cd /vagrant && drush vset theme_default bootstrap"
+# theme, overlay, toolbar
+vagrant ssh -c "cd /vagrant && drush pm-enable -y $theme"
+vagrant ssh -c "cd /vagrant && drush vset theme_default $theme"
 vagrant ssh -c "cd /vagrant && drush vset admin_theme seven"
 vagrant ssh -c "cd /vagrant && drush vset node_admin_theme 1"
-
-# admin
 vagrant ssh -c "cd /vagrant && drush pm-enable -y overlay toolbar"
 
 # modules
+vagrant ssh -c "cd /vagrant && drush pm-enable -y $modules"
