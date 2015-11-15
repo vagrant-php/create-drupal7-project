@@ -166,6 +166,7 @@ fi
 
 # replace variables within config
 sed -i "" -e "s/%%%%name%%%%/$name/g" $tempDir/sites/default/settings.php
+sed -i "" -e "s/%%%%name%%%%/$name/g" $tempDir/drupal.sql
 
 # copy the prepared config to the project
 cp -rf $tempDir/* .
