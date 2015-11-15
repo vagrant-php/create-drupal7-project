@@ -196,6 +196,7 @@ fi
 
 # internationalization
 vagrant ssh -c "cd /vagrant && drush dl drush_language"
+vagrant ssh -c "cd /vagrant && drush pm-download -y l10n_update i18n locale"
 vagrant ssh -c "cd /vagrant && drush pm-enable -y l10n_update i18n i18n_block i18n_field i18n_node i18n_variable locale"
 vagrant ssh -c "cd /vagrant && drush language-add $language"
 vagrant ssh -c "cd /vagrant && drush language-default $language"
