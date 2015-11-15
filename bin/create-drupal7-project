@@ -185,19 +185,19 @@ if [ -f "../drupal.sql" ]; then
 fi
 
 # internationalization
-vagrant ssh -c "drush dl drush_language"
-vagrant ssh -c "drush pm-enable -y l10n_update i18n locale"
-vagrant ssh -c "drush language-default $language"
-vagrant ssh -c "drush l10n-update-refresh"
-vagrant ssh -c "drush l10n-update --languages=$language"
+vagrant ssh -c "cd /vagrant && drush dl drush_language"
+vagrant ssh -c "cd /vagrant && drush pm-enable -y l10n_update i18n locale"
+vagrant ssh -c "cd /vagrant && drush language-default $language"
+vagrant ssh -c "cd /vagrant && drush l10n-update-refresh"
+vagrant ssh -c "cd /vagrant && drush l10n-update --languages=$language"
 
 # theme
-vagrant ssh -c "drush pm-enable -y bootstrap"
-vagrant ssh -c "drush vset theme_default bootstrap"
-vagrant ssh -c "drush vset admin_theme seven"
-vagrant ssh -c "drush vset node_admin_theme 1"
+vagrant ssh -c "cd /vagrant && drush pm-enable -y bootstrap"
+vagrant ssh -c "cd /vagrant && drush vset theme_default bootstrap"
+vagrant ssh -c "cd /vagrant && drush vset admin_theme seven"
+vagrant ssh -c "cd /vagrant && drush vset node_admin_theme 1"
 
 # admin
-vagrant ssh -c "drush pm-enable -y overlay toolbar"
+vagrant ssh -c "cd /vagrant && drush pm-enable -y overlay toolbar"
 
 # modules
