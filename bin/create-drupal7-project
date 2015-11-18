@@ -94,6 +94,8 @@ if [ -d "$name" ]; then
 fi
 
 # get other variables
+hostname=$name.dev
+hostnameLength=${#hostname}
 url=https://github.com/drupal/drupal/archive/$version.zip
 filename=drupal-$version.zip
 foldername=drupal-$version
@@ -147,7 +149,7 @@ if [ "$?" ==  1 ]; then
 fi
 
 # prepare a default vagrant.yml
-printf "hostname: $name.dev\napplication: $application\n" > vagrant.yml
+printf "hostname: $hostname\napplication: $application\n" > vagrant.yml
 
 # add vagrantSharetype if defined
 if [[ $vagrantSharetype ]]; then
@@ -176,7 +178,9 @@ fi
 
 # replace variables within config
 sed -i "" -e "s/%%%%name%%%%/$name/g" $tempDir/sites/default/settings.php
-sed -i "" -e "s/%%%%name%%%%/$name/g" $tempDir/drupal.sql
+
+sed -i "" -e "s/%%%%hostname%%%%/$hostname/g" $tempDir/drupal.sql
+sed -i "" -e "s/%%%%hostnamelength%%%%/$hostnameLength/g" $tempDir/drupal.sql
 
 # copy the prepared config to the project
 cp -rf $tempDir/* .
