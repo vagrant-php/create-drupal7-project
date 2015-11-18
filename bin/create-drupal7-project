@@ -94,6 +94,7 @@ if [ -d "$name" ]; then
 fi
 
 # get other variables
+nameLength=${#name}
 hostname=$name.dev
 hostnameLength=${#hostname}
 url=https://github.com/drupal/drupal/archive/$version.zip
@@ -179,6 +180,8 @@ fi
 # replace variables within config
 sed -i "" -e "s/%%%%name%%%%/$name/g" $tempDir/sites/default/settings.php
 
+sed -i "" -e "s/%%%%name%%%%/$name/g" $tempDir/drupal.sql
+sed -i "" -e "s/%%%%namelength%%%%/$nameLength/g" $tempDir/drupal.sql
 sed -i "" -e "s/%%%%hostname%%%%/$hostname/g" $tempDir/drupal.sql
 sed -i "" -e "s/%%%%hostnamelength%%%%/$hostnameLength/g" $tempDir/drupal.sql
 
