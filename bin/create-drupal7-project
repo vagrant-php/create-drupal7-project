@@ -13,9 +13,13 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 ##################################################################################################
 
 # defaults
+accountName=admin
+accountMail=admin@admin.admin
+accountPassword=JuZas67GzZtas67GZas
 application=drupal7
 language=de
 modules="ckeditor date entityreference file image i18n_menu i18n_path i18n_redirect i18n_string i18n_taxonomy inline_entity_form insert link list multiupload_filefield_widget multiupload_imagefield_widget menu menu_block number options path pathauto smtp taxonomy views webform webform_reply_to webform_validation"
+siteMail=site@site.site
 theme=bootstrap
 vagrantPhpBranch=14.04
 vagrantPhpRepository=https://github.com/vagrant-php/ubuntu.git
@@ -27,6 +31,18 @@ version=7.41
 for i in "$@"
 do
     case $i in
+        --accountName=*)
+            accountName="${i#*=}"
+            shift
+        ;;
+        --accountMail=*)
+            accountMail="${i#*=}"
+            shift
+        ;;
+        --accountPassword=*)
+            accountPassword="${i#*=}"
+            shift
+        ;;
         --language=*)
             language="${i#*=}"
             shift
@@ -37,6 +53,10 @@ do
         ;;
         --name=*)
             name="${i#*=}"
+            shift
+        ;;
+        --siteMail=*)
+            siteMail="${i#*=}"
             shift
         ;;
         --theme=*)
@@ -82,7 +102,7 @@ if [ -z "$name" ]; then
 fi
 
 # check for name signs
-if [[ $name = *[^[:alnum:]]* ]]; then
+if [[ $name = *[^[:alnum:],\-]* ]]; then
     echo "please enter a project name which is alphanumeric"
     exit 1
 fi
@@ -94,12 +114,11 @@ if [ -d "$name" ]; then
 fi
 
 # get other variables
-nameLength=${#name}
 hostname=$name.dev
-hostnameLength=${#hostname}
 url=https://github.com/drupal/drupal/archive/$version.zip
 filename=drupal-$version.zip
 foldername=drupal-$version
+safename=${name/[^[:alnum:]]/_}
 
 # check if the repository exists
 git ls-remote --exit-code $vagrantPhpRepository $vagrantPhpBranch > /dev/null
@@ -178,12 +197,7 @@ if [ -d "$versionFilePath" ]; then
 fi
 
 # replace variables within config
-sed -i "" -e "s/%%%%name%%%%/$name/g" $tempDir/sites/default/settings.php
-
-sed -i "" -e "s/%%%%name%%%%/$name/g" $tempDir/drupal.sql
-sed -i "" -e "s/%%%%namelength%%%%/$nameLength/g" $tempDir/drupal.sql
-sed -i "" -e "s/%%%%hostname%%%%/$hostname/g" $tempDir/drupal.sql
-sed -i "" -e "s/%%%%hostnamelength%%%%/$hostnameLength/g" $tempDir/drupal.sql
+sed -i "" -e "s/%%%%safename%%%%/$safename/g" $tempDir/sites/default/settings.php
 
 # copy the prepared config to the project
 cp -rf $tempDir/* .
@@ -193,13 +207,8 @@ cd vagrant-php
 # setup vagrant
 vagrant up --provider=$vagrantProvider
 
-# create database
-vagrant ssh -c "echo 'CREATE DATABASE $name;' | mysql"
-
-# install sql dump if exists
-if [ -f "../drupal.sql" ]; then
-    vagrant ssh -c "cd /vagrant && mysql $name < drupal.sql"
-fi
+# install drupal
+vagrant ssh -c "cd /vagrant && yes | drush site-install minimal --account-mail=$accountMail --account-name=$accountName --account-pass=$accountPassword --db-su=root --db-su-pw=root --site-mail=$siteMail --site-name=$name "
 
 # enable field:ui (cause without that, user cant add fields on node
 vagrant ssh -c "cd /vagrant && drush pm-enable -y field_ui"
