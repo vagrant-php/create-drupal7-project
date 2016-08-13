@@ -218,29 +218,29 @@ cd vagrant-php
 vagrant up --provider=$vagrantProvider
 
 # install drupal
-vagrant ssh -c "cd /vagrant && yes | drush site-install minimal --account-mail=$accountMail --account-name=$accountName --account-pass=$accountPassword --db-su=root --db-su-pw=root --site-mail=$siteMail --site-name=$name "
+vagrant ssh -c "cd /vagrant && yes | drush7 site-install minimal --account-mail=$accountMail --account-name=$accountName --account-pass=$accountPassword --db-su=root --db-su-pw=root --site-mail=$siteMail --site-name=$name "
 
 # enable field:ui (cause without that, user cant add fields on node
-vagrant ssh -c "cd /vagrant && drush pm-enable -y field_ui"
+vagrant ssh -c "cd /vagrant && drush7 pm-enable -y field_ui"
 
 # internationalization
-vagrant ssh -c "cd /vagrant && drush dl drush_language"
-vagrant ssh -c "cd /vagrant && drush pm-download -y l10n_update i18n"
-vagrant ssh -c "cd /vagrant && drush pm-enable -y l10n_update i18n locale"
-vagrant ssh -c "cd /vagrant && drush pm-enable -y i18n_block i18n_field i18n_node i18n_variable"
-vagrant ssh -c "cd /vagrant && drush language-add $language"
-vagrant ssh -c "cd /vagrant && drush language-default $language"
-vagrant ssh -c "cd /vagrant && drush l10n-update-refresh"
-vagrant ssh -c "cd /vagrant && drush l10n-update --languages=$language"
+vagrant ssh -c "cd /vagrant && drush7 dl drush_language"
+vagrant ssh -c "cd /vagrant && drush7 pm-download -y l10n_update i18n"
+vagrant ssh -c "cd /vagrant && drush7 pm-enable -y l10n_update i18n locale"
+vagrant ssh -c "cd /vagrant && drush7 pm-enable -y i18n_block i18n_field i18n_node i18n_variable"
+vagrant ssh -c "cd /vagrant && drush7 language-add $language"
+vagrant ssh -c "cd /vagrant && drush7 language-default $language"
+vagrant ssh -c "cd /vagrant && drush7 l10n-update-refresh"
+vagrant ssh -c "cd /vagrant && drush7 l10n-update --languages=$language"
 
 # theme, overlay, toolbar
-vagrant ssh -c "cd /vagrant && drush pm-download -y $theme"
-vagrant ssh -c "cd /vagrant && drush pm-enable -y $theme"
-vagrant ssh -c "cd /vagrant && drush vset theme_default $theme"
-vagrant ssh -c "cd /vagrant && drush vset admin_theme seven"
-vagrant ssh -c "cd /vagrant && drush vset node_admin_theme 1"
-vagrant ssh -c "cd /vagrant && drush pm-enable -y overlay toolbar"
+vagrant ssh -c "cd /vagrant && drush7 pm-download -y $theme"
+vagrant ssh -c "cd /vagrant && drush7 pm-enable -y $theme"
+vagrant ssh -c "cd /vagrant && drush7 vset theme_default $theme"
+vagrant ssh -c "cd /vagrant && drush7 vset admin_theme seven"
+vagrant ssh -c "cd /vagrant && drush7 vset node_admin_theme 1"
+vagrant ssh -c "cd /vagrant && drush7 pm-enable -y overlay toolbar"
 
 # modules
-vagrant ssh -c "cd /vagrant && drush pm-download -y $modules"
-vagrant ssh -c "cd /vagrant && drush pm-enable -y $modules"
+vagrant ssh -c "cd /vagrant && drush7 pm-download -y $modules"
+vagrant ssh -c "cd /vagrant && drush7 pm-enable -y $modules"
